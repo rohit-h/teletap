@@ -19,14 +19,23 @@ class User(object):
     def get_peer_id(self):
         return self.user_id
 
+    def __fetch_field(self, field, index):
+        print field.split()
+        try:
+            value = field.split()[index]
+        except:
+            value = ''
+        return value
+
     def update_info(self):
         response = self.tg_instance.sock_request('user_info {0}'.format(self.user_id))
         for line in response:
+            print line
             line = line.strip()
             if line.startswith('User'):
-                self.user_handle = line.split()[2]
+                self.user_handle = self.__fetch_field(line, 2)
             if line.startswith('phone'):
-                self.user_phone = line.split()[1]
+                self.user_phone = self.__fetch_field(line, 1)
             if line.startswith('real name'):
                 self.user_name = str.join(' ', line.split()[2:])
             if line.startswith('online'):
