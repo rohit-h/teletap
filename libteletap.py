@@ -99,9 +99,17 @@ class Action(object):
 
     def send_message(self, peer, text):
         self.tg_tap.sock_command('msg {0} {1}'.format(peer.get_peer_id(), text))
+        
+    def send_image(self, peer, filename):
+        self.tg_tap.sock_command('send_photo {0} {1}'.format(peer.get_peer_id(), filename))
+        
+    def send_text(self, peer, filename):
+        self.tg_tap.sock_command('send_text {0} {1}'.format(peer.get_peer_id(), filename))
 
     def send_typing(self, peer):
         self.tg_tap.sock_command('send_typing {0}'.format(peer.get_peer_id()))
+        
+    
 
 
 class Teletap(object):
@@ -200,7 +208,8 @@ class Teletap(object):
             self.stop_daemon()
         except KeyboardInterrupt:
             self.stop_daemon()
-        self.LOGS.close()
+        if self.LOGS is not None:
+            self.LOGS.close()
         sys.exit(0)
 
 
